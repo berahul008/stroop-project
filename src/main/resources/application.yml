@@ -1,0 +1,9 @@
+server:
+  port: 8080
+
+spring:
+  thymeleaf:
+    cache: true
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true

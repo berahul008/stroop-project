@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <title>Stroop Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <!-- Thymeleaf URL rewriting ensures correct base paths behind proxies -->
+  <link rel="stylesheet" th:href="@{/cssain class="container">
+    <h1>Stroop Test</h1>
+
+    <div class="controls">
+      <button id="startBtn">Start (60s)</button>
+      <span id="timer">60</span>s
+    </div>
+
+    <div id="stimulus" class="stimulus" aria-live="assertive" aria-atomic="true">
+      Press Start
+    </div>
+
+    <div id="choices" class="choices"></div>
+
+    <div id="status" class="status"></div>
+
+    <section class="summary">
+      <h2>Summary</h2>
+      <div>Trials: <span id="sumTrials">0</span></div>
+      <div>Correct: <span id="sumCorrect">0</span></div>
+      <div>Accuracy: <span id="sumAccuracy">0</span>%</div>
+      <div>Avg Reaction: <span id="sumAvg">0</span> ms</div>
+    </section>
+
+    <div class="a11y">
+      <label><input type="checkbox" id="cbMode"> Color-blind friendly mode</label>
+    </div>
+  </main>
+
+  <script>
+    window.__SESSION_ID__ = (crypto && crypto.randomUUID) ? crypto.randomUUID()
+                          : 'sess-' + Math.random().toString(36).slice(2);
+  </script>
+
+  <!-- Load the JS at the end (again using Thymeleaf URL rewriting) -->
+  @{/js/app.js}</script>
+</body>
+</html>
