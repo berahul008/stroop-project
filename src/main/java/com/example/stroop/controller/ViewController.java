@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ViewController {
     @GetMapping({"/", "/index"})
     public String index() {
-        return "index"; // maps to src/main/resources/templates/index.html
+        // Because we moved index.html to /static, forward to it:
+        return "forward:/index.html";
     }
 }
-

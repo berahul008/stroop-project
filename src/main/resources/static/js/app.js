@@ -1,4 +1,5 @@
 (() => {
+  // ===== Single-stimulus Stroop (existing) =====
   const sessionId = window.__SESSION_ID__;
   const elStimulus = document.getElementById('stimulus');
   const elChoices  = document.getElementById('choices');
@@ -17,26 +18,28 @@
   let current = null;
   let issuedAt = 0;
 
-  function setTimerUI() { elTimer.textContent = remaining; }
-  function status(msg)  { elStatus.textContent = msg; }
+  function setTimerUI() { if (elTimer) elTimer.textContent = remaining; }
+  function status(msg)  { if (elStatus) elStatus.textContent = msg; }
 
   async function getStimulus() {
     const res = await fetch(`/api/stimulus?sessionId=${encodeURIComponent(sessionId)}`);
     const data = await res.json();
     current = data;
     issuedAt = performance.now();
-    elStimulus.textContent = data.word;
-    elStimulus.style.color = data.inkHex;
+    if (elStimulus) {
+      elStimulus.textContent = data.word;
+      elStimulus.style.color = data.inkHex;
+    }
     renderChoices(data.choices);
   }
 
   function renderChoices(arr) {
+    if (!elChoices) return;
     elChoices.innerHTML = '';
     arr.forEach(c => {
       const b = document.createElement('button');
       b.textContent = c;
-      if (cbMode.checked) {
-        // Simple accessibility tweaks
+      if (cbMode && cbMode.checked) {
         b.style.borderWidth = '2px';
         b.style.textTransform = 'uppercase';
       }
@@ -68,12 +71,14 @@
   }
 
   async function refreshSummary() {
-    const res = await fetch(`/api/summary?sessionId=${encodeURIComponent(sessionId)}`);
-    const s = await res.json();
-    elTrials.textContent = s.totalTrials;
-    elCorrect.textContent = s.correct;
-    elAcc.textContent = s.accuracy.toFixed(1);
-    elAvg.textContent = s.avgLatencyMs;
+    try {
+      const res = await fetch(`/api/summary?sessionId=${encodeURIComponent(sessionId)}`);
+      const s = await res.json();
+      if (elTrials)   elTrials.textContent = s.totalTrials;
+      if (elCorrect)  elCorrect.textContent = s.correct;
+      if (elAcc)      elAcc.textContent = s.accuracy.toFixed(1);
+      if (elAvg)      elAvg.textContent = s.avgLatencyMs;
+    } catch (_) {}
   }
 
   function tick() {
@@ -87,16 +92,42 @@
     }
   }
 
-  elStart.addEventListener('click', async () => {
-    running = true;
-    remaining = 60;
-    setTimerUI();
-    clearInterval(timerHandle);
-    timerHandle = setInterval(tick, 1000);
-    status('Get ready...');
-    await getStimulus();
-  });
+  if (elStart) {
+    elStart.addEventListener('click', async () => {
+      running = true;
+      remaining = 60;
+      setTimerUI();
+      clearInterval(timerHandle);
+      timerHandle = setInterval(tick, 1000);
+      status('Get ready...');
+      await getStimulus();
+    });
+  }
 
-  // Initial summary
+  // ===== Render the 4×4 matrix cells =====
+  const PALETTE = {
+    RED:    '#e53935',
+    GREEN:  '#43a047',
+    BLUE:   '#1e88e5',
+    YELLOW: '#fdd835'
+  };
+
+  function initMatrixCells() {
+    const cells = document.querySelectorAll('.matrix-cell');
+    cells.forEach(cell => {
+      const word = cell.getAttribute('data-word');
+      const ink  = cell.getAttribute('data-ink');
+      cell.textContent = word;
+      cell.style.color = PALETTE[ink] || '#ffffff';
+      if (cbMode && cbMode.checked) {
+        // Optional accessibility tweaks on load
+        cell.style.letterSpacing = '0.5px';
+        cell.style.textTransform = 'uppercase';
+      }
+    });
+  }
+
+  // Initialize on load
   refreshSummary();
+  initMatrixCells();
 })();

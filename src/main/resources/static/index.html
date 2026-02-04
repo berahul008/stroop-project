@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Stroop Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <!-- IMPORTANT: well-formed link tag (no stray text at top) -->
+  /css/styles.css
+</head>
+<body>
+  <main class="container">
+    <h1>Stroop Test</h1>
+
+    <!-- Single-stimulus controls -->
+    <div class="controls">
+      <button id="startBtn">Start (60s)</button>
+      <span id="timer">60</span>s
+    </div>
+
+    <div id="stimulus" class="stimulus" aria-live="assertive" aria-atomic="true">
+      Press Start
+    </div>
+
+    <div id="choices" class="choices"></div>
+    <div id="status" class="status"></div>
+
+    <section class="summary">
+      <h2>Summary</h2>
+      <div>Trials: <span id="sumTrials">0</span></div>
+      <div>Correct: <span id="sumCorrect">0</span></div>
+      <div>Accuracy: <span id="sumAccuracy">0</span>%</div>
+      <div>Avg Reaction: <span id="sumAvg">0</span> ms</div>
+    </section>
+
+    <!-- 4×4 Matrix -->
+    <section class="matrix">
+      <h2>4×4 Color–Word Matrix</h2>
+      <p class="muted">Rows are WORDS, columns are ink COLORS. Each cell = WORD shown in that COLOR.</p>
+
+      <!-- Grid with header row/column -->
+      <div class="matrix-grid">
+        <!-- top-left empty header -->
+        <div class="cell cell--corner"></div>
+
+        <!-- header columns (colors) -->
+        <div class="cell cell--header">RED</div>
+        <div class="cell cell--header">GREEN</div>
+        <div class="cell cell--header">BLUE</div>
+        <div class="cell cell--header">YELLOW</div>
+
+        <!-- Row 1 (word RED) -->
+        <div class="cell cell--header">RED</div>
+        <div class="cell matrix-cell" data-word="RED" data-ink="RED"></div>
+        <div class="cell matrix-cell" data-word="RED" data-ink="GREEN"></div>
+        <div class="cell matrix-cell" data-word="RED" data-ink="BLUE"></div>
+        <div class="cell matrix-cell" data-word="RED" data-ink="YELLOW"></div>
+
+        <!-- Row 2 (word GREEN) -->
+        <div class="cell cell--header">GREEN</div>
+        <div class="cell matrix-cell" data-word="GREEN" data-ink="RED"></div>
+        <div class="cell matrix-cell" data-word="GREEN" data-ink="GREEN"></div>
+        <div class="cell matrix-cell" data-word="GREEN" data-ink="BLUE"></div>
+        <div class="cell matrix-cell" data-word="GREEN" data-ink="YELLOW"></div>
+
+        <!-- Row 3 (word BLUE) -->
+        <div class="cell cell--header">BLUE</div>
+        <div class="cell matrix-cell" data-word="BLUE" data-ink="RED"></div>
+        <div class="cell matrix-cell" data-word="BLUE" data-ink="GREEN"></div>
+        <div class="cell matrix-cell" data-word="BLUE" data-ink="BLUE"></div>
+        <div class="cell matrix-cell" data-word="BLUE" data-ink="YELLOW"></div>
+
+        <!-- Row 4 (word YELLOW) -->
+        <div class="cell cell--header">YELLOW</div>
+        <div class="cell matrix-cell" data-word="YELLOW" data-ink="RED"></div>
+        <div class="cell matrix-cell" data-word="YELLOW" data-ink="GREEN"></div>
+        <div class="cell matrix-cell" data-word="YELLOW" data-ink="BLUE"></div>
+        <div class="cell matrix-cell" data-word="YELLOW" data-ink="YELLOW"></div>
+      </div>
+    </section>
+
+    <div class="a11y">
+      <label><input type="checkbox" id="cbMode"> Color-blind friendly mode</label>
+    </div>
+  </main>
+
+  <script>
+    // Safe session id for single-stimulus mode
+    window.__SESSION_ID__ = (crypto && crypto.randomUUID) ? crypto.randomUUID()
+                        : 'sess-' + Math.random().toString(36).slice(2);
+  </script>
+  /js/app.js</script>
+</body>
+</html>
+`
